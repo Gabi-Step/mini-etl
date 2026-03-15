@@ -208,3 +208,6 @@ __marimo__/
 
 # Pycharm
 .idea
+
+# demo script run
+.customer_total_orders_value*
