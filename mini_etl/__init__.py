@@ -29,7 +29,7 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    from . import customer
-    app.register_blueprint(customer.bp)
+    from . import customers
+    app.register_blueprint(customers.bp)
 
     return app

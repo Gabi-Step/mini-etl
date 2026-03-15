@@ -9,7 +9,7 @@ from mini_etl.db import get_db
 
 bp = Blueprint('customer', __name__, url_prefix='/customer')
 
-@bp.route('/customers/<int:id>', methods=['GET'])
+@bp.route('/<int:id>', methods=['GET'])
 def get_customer(customer_id: int):
 
     db = get_db()
