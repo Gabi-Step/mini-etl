@@ -1,5 +1,5 @@
 def main():
-    print("Hello from mini-etl!")
+    print("Hello from mini_etl!")
 
 
 if __name__ == "__main__":
