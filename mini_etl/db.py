@@ -9,7 +9,7 @@ def get_db():
     if 'db' not in g:
         g.db = sqlite3.connect(
             current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
+            detect_types=sqlite3.PARSE_DECLTYPES,
         )
         g.db.row_factory = sqlite3.Row
 
@@ -42,6 +42,22 @@ sqlite3.register_converter(
 )
 
 
+def load_data():
+    db = get_db()
+    with current_app.open_resource('demo_data/data.sql') as f:
+        db.executescript(f.read().decode('utf8'))
+
+@click.command('load-demo-data')
+def load_demo_data():
+    try:
+        load_data()
+    except Exception as e:
+        click.echo(f'Failed to load demo data: {e}')
+        return
+    click.echo('Loading demo data completed.')
+
+
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(load_demo_data)
