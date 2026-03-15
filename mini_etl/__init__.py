@@ -2,8 +2,11 @@ import os
 
 from flask import Flask
 
+from mini_etl.cli import add_app_commands
 
-def create_app(test_config=None):
+
+def create_app(test_config=None) -> Flask:
+    """Example of flask set up adapted from: https://flask.palletsprojects.com/en/stable/tutorial/factory/"""
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -21,10 +24,8 @@ def create_app(test_config=None):
     # ensure the instance folder exists
     os.makedirs(app.instance_path, exist_ok=True)
 
-    from . import db
-    db.init_app(app)
-
-    from . import customers
+    add_app_commands(app)
+    from mini_etl.api import customers
     app.register_blueprint(customers.bp)
 
     return app
