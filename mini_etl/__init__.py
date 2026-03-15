@@ -31,5 +31,6 @@ def create_app(test_config=None):
 
     from . import customers
     app.register_blueprint(customers.bp)
+    print(app.url_map)
 
     return app

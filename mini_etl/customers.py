@@ -7,10 +7,10 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from mini_etl.db import get_db
 
-bp = Blueprint('customer', __name__, url_prefix='/customer')
+bp = Blueprint('customers', __name__, url_prefix='/customers')
 
-@bp.route('/<int:id>', methods=['GET'])
-def get_customer(customer_id: int):
+@bp.route('/<int:customer_id>', methods=['GET'])
+def get_customer(customer_id):
 
     db = get_db()
     customer = db.execute(
