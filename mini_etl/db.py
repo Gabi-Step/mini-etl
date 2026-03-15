@@ -1,7 +1,10 @@
+"""Database connection helper.
+Reference: https://flask.palletsprojects.com/en/stable/tutorial/database/
+"""
 import sqlite3
 from contextlib import contextmanager
 
-from flask import current_app, g
+from flask import current_app
 
 
 @contextmanager

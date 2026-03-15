@@ -4,6 +4,10 @@ import pandas as pd
 
 
 def customer_total_orders_value(conn) -> None:
+    """Get all active customers and their total order value.
+    Store results in a csv file.
+    conn: database connection.
+    """
     df = pd.read_sql_query('''
         SELECT o.customer_id, c.first_name, c.last_name, o.quantity, o.price
         FROM orders o

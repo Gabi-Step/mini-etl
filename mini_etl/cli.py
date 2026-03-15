@@ -1,3 +1,6 @@
+"""Command line interface.
+Adapted from: https://flask.palletsprojects.com/en/stable/tutorial/database/.
+"""
 import click
 from flask import current_app
 
@@ -6,12 +9,14 @@ from mini_etl.order_totals import customer_total_orders_value
 
 
 def load_data():
+    """Load demo data into the database."""
     with get_db() as conn:
         with current_app.open_resource('demo_data/data.sql') as f:
             conn.executescript(f.read().decode('utf8'))
 
 
 def init_db():
+    """Clear the existing data and recreate them."""
     with get_db() as conn:
         with current_app.open_resource('schema.sql') as f:
             conn.executescript(f.read().decode('utf8'))
@@ -19,7 +24,6 @@ def init_db():
 
 @click.command('init-db')
 def init_db_command():
-    """Clear the existing data and create new tables."""
     init_db()
     click.echo('Initialized the database.')
 
