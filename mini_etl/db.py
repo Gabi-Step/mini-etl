@@ -42,6 +42,22 @@ sqlite3.register_converter(
 )
 
 
+def load_data():
+    db = get_db()
+    with current_app.open_resource('demo_data/data.sql') as f:
+        db.executescript(f.read().decode('utf8'))
+
+@click.command('load-demo-data')
+def load_demo_data():
+    try:
+        load_data()
+    except Exception as e:
+        click.echo(f'Failed to load demo data: {e}')
+        return
+    click.echo('Loading demo data completed.')
+
+
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(load_demo_data)
