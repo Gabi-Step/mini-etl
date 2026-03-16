@@ -1,6 +1,6 @@
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Getting Started](#getting-started)
+2. [Getting Started - Linux](#getting-started)
    - [Prerequisites](#prerequisites)
    - [Setup](#setup)
 3. [Usage Examples](#usage-examples)
@@ -15,7 +15,7 @@ endpoint for querying dummy customer orders in a sqlite3 database.
 Additionally, the user of this project can use a CLI command to run a simple ETL script which will total the value for
 all orders placed by active customers.
 
-# Getting Started - Linux
+# Getting Started
 ## Prerequisites
 - make
 - curl
@@ -29,7 +29,7 @@ all orders placed by active customers.
 
 Note: The application will be running on port 5000 by default.
 
-# Getting Started - Windows
+##  Getting Started - Windows
 Windows users: WSL is recommended
 
 # Usage Examples
@@ -159,7 +159,7 @@ Only other installed package:
 - add better error handling - I went for broad Except clauses which are generally considered bad practice.
 - tighten type hints - some funcs are missing them.
 - add pre-commit hooks - use pre-commit to run linting and formatting on every commit. Maybe ruff. 
-- completetests for the ETL script.
+- complete tests for the ETL script.
 - follow conventional commits (more strictly). 
 - add a solid support for Windows users. A simple docker container should be enough.
 - follow TDD development.
