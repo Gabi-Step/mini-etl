@@ -127,6 +127,7 @@ Only other installed package:
     - customers.py - customers API
   - demo_data folder - to store the demo data used in the project - I wanted to separate it from the actual code.
   - schema.sql - to define the database schema.
+- tests - where our tests are located.
 
 ## Data flow
 - API path: SQLite -> Flask -> JSON response
