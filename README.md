@@ -56,14 +56,14 @@ Or if you do not have a favourite browser you can use curl:
 And you should get the same response.
 
 ## Script
-The script **customer_total_orders_value(...**) is located in the order_totals module.
+The script **customer_total_orders_value(...)** is located in the order_totals module.
 To see it in action, run the following command:
 `flask --app mini_etl demo-script-run`
 This will generate a CSV file with the total value of all orders placed by active customers.
 
 Our business is small, so we only have two active (but very loyal) customers - Jane and John Doe.
-There are two other customers in the database, but Bob Smith has been suspended for ordering 200 cans of beans and will
-therefore not appear in the CSV file, as we will not be fullfilling his order. 
+There are two other customers in the database, but Bob Smith has been suspended for ordering 500 cans of beans and will
+therefore not appear in the CSV file, as we will not be fulfilling his order. 
 Sarah Jane has been logically deleted (marked as inactive) and therefore will also not appear in the file.
 
 # Reasoning
@@ -105,6 +105,7 @@ DB choice: sqlite3 - It is lightweight, well-known, and I have used it before.
 Only other installed package:
 - pandas - well established and documented library, golden standard for data processing in Python.
   I knew it had the .to_csv() method. 
+- pytest - standard testing library for Python, used for unit testing. It is something I am already familiar with.
 
 ## Structure
 - in root we have non-source code files:
@@ -127,6 +128,10 @@ Only other installed package:
   - demo_data folder - to store the demo data used in the project - I wanted to separate it from the actual code.
   - schema.sql - to define the database schema.
 
+## Data flow
+- API path: SQLite -> Flask -> JSON response
+- ETL path: SQLite -> script -> CSV
+
 ## Some interesting design decisions
 - The etl script accepts conn as a parameter as the project spec mentions it might be ran periodically or in batches. 
 - The email field in the customers table is unique, but it is not a foreign key. This is because having duplicate emails
@@ -135,15 +140,26 @@ Only other installed package:
 - I was very tempted to make another table "products" and have a foreign key relationship between orders and products.
   This is because it's a very obvious entity and would allow for one order to have multiple products - a very realistic
   real world scenario. However, this would make the schema more complex and I would be making an assumption about the 
-  business logic. Maybe the client wants the data to be stored in this way for reporting purposes. In a real world scenario,
+  business logic. Maybe the client wants the data to be stored in this way for reporting purposes. In a real-world scenario,
   I would clarify this point with the client.
 - conn.execute('SELECT * FROM customers WHERE id = ?', (customer_id,)).fetchone() the query is formatted like this to
   protect us from SQL injection attacks.
+- I added a timestamp to the generated CSV file, so that the user can easily identify which file is the latest. 
+  Additionally, the same file won't be overwritten if the script is run again.
+- I used the "with" statement to create a context manager for the database connection - this is because I wanted to make
+  sure that the connection is closed after the script has finished running.
+- The example users in the demo data are just covering the bases - one active with multiple orders, one active with one order,
+  one inactive and one suspended with an order. 
+- Tests and src are 2 separate folders. This is because test code must be kept separate from the source code.
+- The test setup uses the schema.sql and data.sql to ensure that we are getting the same environment. Plus we are
+  keeping it DRY. 
 
 # Further improvements
 - add better error handling - I went for broad Except clauses which are generally considered bad practice.
 - tighten type hints - some funcs are missing them.
 - add pre-commit hooks - use pre-commit to run linting and formatting on every commit. Maybe ruff. 
-- add tests for the ETL script.
+- completetests for the ETL script.
 - follow conventional commits (more strictly). 
-- add a solid support for Windows users (instead of outsourcing to WSL). Maybe a docker container?
+- add a solid support for Windows users. A simple docker container should be enough.
+- follow TDD development.
+- expand the dummy data to include more scenarios.
